@@ -1,5 +1,4 @@
 #include <iostream>
-
 using namespace std;
 
 class Lista{
@@ -23,7 +22,7 @@ class Lista{
 
 		void imprimeLista();
 
-		int mostraElemento(int posicao);
+		void mostraElemento(int posicao);
 
 };
 
@@ -71,7 +70,7 @@ void Lista::imprimeLista(){
 		}
 	}
 
-int Lista::mostraElemento(int posicao){
+void Lista::mostraElemento(int posicao){
 	if(posicao<tamanhoLista){
 		cout<<minhaLista[posicao].valorCarta()<<"\t"<<minhaLista[posicao].valorNaipe()<<endl;
 	}
@@ -84,37 +83,40 @@ class Pilha:public Lista{
 	public:
 		Pilha(){//construtor da classe
 		}
-		
+
 		void inserir(cartaBaralho elemento){ //inserir na ultima posicao da lista
 			Lista::inserir(elemento);
 		}
-		
+
 		void remover(){ //posicao comeca com 0
 			Lista::remover(Lista::tamanhoLista - 1);
 		}
-		
-		int topo(){
-			Lista::mostraElemento(Lista::tamanhoLista - 1);
+
+		cartaBaralho topo(){
+			return minhaLista[tamanhoLista-1];
 		}
-		
+
 		bool vazia(){
 			if(Lista::tamanhoLista == 0){
 				return true;
 			}else{
 				return false;
-			} 
+			}
 		}
-		
+
 		bool cheia(){
 			if(Lista::tamanhoLista == Lista::tamanhoMaximo){
 				return true;
 			}else{
 				return false;
-			} 
+			}
 		}
-		
+
+		int tamanhoPilha() {
+			return tamanhoLista;
+		}
+
 		void imprime(){
-			cout<<"******** Baralho ***********"<<endl;
 			for(int i = 0 ; i<tamanhoLista; i++){
 				cout<<Lista::minhaLista[i].valorCarta()<<"\t";
 				if(Lista::minhaLista[i].valorNaipe() == 0){
@@ -130,4 +132,3 @@ class Pilha:public Lista{
 		}
 
 };
-

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void baguncar(cartaBaralho a[], int tamanho){
+void baguncar(cartaBaralho a[], int tamanho){	
 	srand((unsigned)time(0));
 	for(int i=tamanho-1; i>=1; --i){
     	swap(a[i], a[rand()%i]);
@@ -31,52 +31,62 @@ void init(Pilha *jogadorA, Pilha *jogadorB){
 void mostraRodada(cartaBaralho a, cartaBaralho b) {
 	cout << a.valorCarta() << " " << a.valorNaipe() << endl;
 	cout << b.valorCarta() << " " << b.valorNaipe() << endl;
-	cout << "-------------------------------------" << endl;
 }
 
-void comparaCartas(int a, int b) {
-
+void comparaCartas(cartaBaralho a, cartaBaralho b, Pilha *areaCombate, Pilha *prisioneiroA, Pilha *prisioneiroB) {
+	if (a.valorCarta() != b.valorCarta()) {
+		if (a.valorCarta() > b.valorCarta()) {
+			while (!areaCombate->vazia()){
+				prisioneiroA->inserir(areaCombate->topo());
+				areaCombate->remover();
+			}
+		} else {
+			while (!areaCombate->vazia()){
+				prisioneiroB->inserir(areaCombate->topo());
+				areaCombate->remover();
+			}
+		}
+		cout << "-------------------------------------" << endl;
+	}else{
+		areaCombate->imprime();
+	}
 }
 
 
 int main(){
-	Pilha jogadorA, jogadorB, prisioneiroA, prisioneiroB;
+	Pilha jogadorA, jogadorB, areaCombate, prisioneiroA, prisioneiroB;
 	init(&jogadorA, &jogadorB);
+//	 cout<< "----- A ----- " << jogadorA.tamanhoPilha()<<endl;
+//	 jogadorA.imprime();
+//	 cout<< "----- B ----- " << jogadorB.tamanhoPilha()<<endl;
+//	 jogadorB.imprime();
 
-	// cout<< "----- A ----- " << jogadorA.tamanhoPilha()<<endl;
-	// jogadorA.imprime();
-	// cout<< "----- B ----- " << jogadorB.tamanhoPilha()<<endl;
-	// jogadorB.imprime();
-
-	cout << "Carta Naipe" << endl;
-
+	cout << "Carta \t Naipe" << endl;
 	bool game = true;
 	int rodadas = 0;
+	
 	while (game) {
 		cartaBaralho cartaA, cartaB;
 		cartaA = jogadorA.topo();
 		cartaB = jogadorB.topo();
-
+		//vira as cartas
+		cartaA.vira();
+		cartaB.vira();
+		//inserir as cartas na area de combate		
+		areaCombate.inserir(cartaA);
+		areaCombate.inserir(cartaB);
+		//remove a primeira carta de cada jogador, pois as cartas estao na area de combate
+		jogadorA.remover();
+		jogadorB.remover();
+//		cout << "Cartas - Jogador A: " << prisioneiroA.tamanhoPilha()<<endl;
+//		cout << "Cartas - Jogador B: " << prisioneiroB.tamanhoPilha()<<endl;
 		int valorCartaA = cartaA.valorCarta();
 		int valorCartaB = cartaB.valorCarta();
-
 		mostraRodada(cartaA, cartaB);
+		comparaCartas(cartaA, cartaB, &areaCombate, &prisioneiroA, &prisioneiroB);
 
-		if (valorCartaA != valorCartaB) {
-			if (valorCartaA > valorCartaB) {
-				prisioneiroA.inserir(cartaA);
-				prisioneiroA.inserir(cartaB);
-			} else if (valorCartaB > valorCartaA) {
-				prisioneiroB.inserir(cartaA);
-				prisioneiroB.inserir(cartaB);
-			}
-
-			jogadorA.remover();
-			jogadorB.remover();
-		}
-
-		// Condições de parada
-		if (rodadas >= 5) game = false;
+		// Condicoes de parada
+		if (rodadas >= 20) game = false;
 
 		// Precisa pegar as cartas do prisioneiro
 		if (prisioneiroA.tamanhoPilha() >= 35 || prisioneiroB.tamanhoPilha() >= 35)

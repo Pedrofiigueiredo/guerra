@@ -112,6 +112,22 @@ class Pilha:public Lista{
 				return false;
 			} 
 		}
+		
+		void imprime(){
+			cout<<"******** Baralho ***********"<<endl;
+			for(int i = 0 ; i<tamanhoLista; i++){
+				cout<<Lista::minhaLista[i].valorCarta()<<"\t";
+				if(Lista::minhaLista[i].valorNaipe() == 0){
+					cout<<"Espadas"<<endl;
+				}else if(Lista::minhaLista[i].valorNaipe() == 1){
+					cout<<"Ouros"<<endl;
+				}else if(Lista::minhaLista[i].valorNaipe() == 2){
+					cout<<"Paus"<<endl;
+				}else{
+					cout<<"Copas"<<endl;
+				}
+			}
+		}
 
 };
 

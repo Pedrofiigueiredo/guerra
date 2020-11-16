@@ -1,0 +1,372 @@
+Pedro Figueiredo Dias - 41990455
+Ye Wei Jiang - 41926293
+Kevin Yao Ji - 41916492
+Claudio Ramos Siqueira Junior - 41916565
+
+xx cartaBaralho.h xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//Define a classe Carta de Baralho
+
+class cartaBaralho{
+  	public:
+	  	// Declara os valores posiveis de Naipe e Cor de carta
+	    enum Naipe{Espadas, Ouros, Paus, Copas};
+	    enum Cor{Vermelha, Preta};
+
+		// Construtor principal: define Naipe e Valor e virada para baixo
+	    cartaBaralho(Naipe np, int valor){
+	      cartaValor=valor;
+	      cartaNaipe=np;
+	      faceParaCima=false;
+	    }
+
+		//Construtor 2 - Cria uma carta sem Valor ou Naipe	e define que a carta esta virada para baixo
+	    cartaBaralho(){
+	      faceParaCima=false;
+	    }
+
+		// Vira uma carta, se esta virada para baixo passa a estar virada para cima e vice-versa
+	    void vira(){
+	      faceParaCima = !faceParaCima;
+	    }
+
+		// Retorna o valor da carta
+	    int valorCarta(){
+	      return cartaValor;
+	    }
+
+		// Indica se a carta esta virada para cima ou para baixo
+	    bool estaViradaParaCima(){
+	      return faceParaCima;
+	    }
+
+		// Retorna o Naipe de uma carta
+	    Naipe valorNaipe(){
+	      return cartaNaipe;
+	    }
+
+		// Define o Naipe de uma carta
+	    void setCarta(Naipe np, int valor){
+	      cartaNaipe=np;
+	      cartaValor=valor;
+	    }
+
+	    //Retorna se a carta eh preta ou vermelha
+	    Cor valorCor(){
+	      if(cartaNaipe==cartaBaralho::Ouros || cartaNaipe==cartaBaralho::Copas){
+	        return cartaBaralho::Vermelha;
+	      }
+	      else{
+	        return cartaBaralho::Preta;
+	      }
+	    }
+ 	private:
+	    bool faceParaCima; // Indica se a carta esta virada para cima ou para baixo
+	    int cartaValor;    // Indica o valor da carta, de 1 ate 13, sendo As = 1; Valete = 11; Dama = 12 e Rei = 13
+	    Naipe cartaNaipe;  // Indica o Naipe da carta. Nao eh importante  para o jogo Guerra
+};
+
+
+xx pilha.h xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+#include <iostream>
+using namespace std;
+
+class Lista{
+	protected:
+		cartaBaralho minhaLista[52];
+		int tamanhoLista=0;
+		int tamanhoMaximo=52;
+
+		void abreEspacoLista(int posicao);  // assinatura do metodo - tipo de retorno, nome do metodo e parametros com seus tipos
+
+		void fechaEspacoLista(int posicao);
+
+	public:
+		Lista(){//construtor da classe
+		}
+		void inserir(cartaBaralho elemento); //inserir na ultima posicao da lista
+
+		void inserir(cartaBaralho elemento, int posicao); //inserir na posicao desejada
+
+		void remover(int posicao);
+
+		void imprimeLista();
+
+		void mostraElemento(int posicao);
+
+};
+
+void Lista::abreEspacoLista(int posicao){
+		for(int i=tamanhoLista; i>=posicao; i--){
+			minhaLista[i]=minhaLista[i-1];
+		}
+	}
+
+void Lista::fechaEspacoLista(int posicao){
+		for(int i=posicao; i<tamanhoLista; i++){
+			minhaLista[i]=minhaLista[i+1];
+		}
+	}
+
+void Lista::inserir(cartaBaralho elemento){
+	if(tamanhoLista<tamanhoMaximo){
+		minhaLista[tamanhoLista]=elemento;
+		tamanhoLista++;
+	}
+}
+
+void Lista::inserir(cartaBaralho elemento, int posicao){ //inserir um novo elemento na lista se houver espaco
+		if((tamanhoLista<tamanhoMaximo)&&(posicao<=tamanhoLista)){
+			abreEspacoLista(posicao);
+			minhaLista[posicao]=elemento;
+			tamanhoLista++;
+		}
+	}
+
+void Lista::remover(int posicao){//assumindo que nao existem valores negativos na lista
+		if(posicao<tamanhoLista){
+			fechaEspacoLista(posicao);
+			tamanhoLista--;
+		}
+		else{
+			cout<<"Posicao nao existe na lista"<<endl;
+		}
+	}
+
+void Lista::imprimeLista(){
+		cout<<"******** LISTA ***********"<<endl;
+		for(int i = 0 ; i<tamanhoLista; i++){
+			cout<<minhaLista[i].valorCarta()<<"\t"<<minhaLista[i].valorNaipe()<<endl;
+		}
+	}
+
+void Lista::mostraElemento(int posicao){
+	if(posicao<tamanhoLista){
+		cout<<minhaLista[posicao].valorCarta()<<"\t"<<minhaLista[posicao].valorNaipe()<<endl;
+	}
+	else{
+		cout<<"Posicao nao existe na lista"<<endl;
+	}
+}
+
+class Pilha:public Lista{
+	public:
+		Pilha(){//construtor da classe
+		}
+
+		void inserir(cartaBaralho elemento){ //inserir na ultima posicao da lista
+			Lista::inserir(elemento);
+		}
+
+		void remover(){ //posicao comeca com 0
+			Lista::remover(Lista::tamanhoLista - 1);
+		}
+
+		cartaBaralho topo(){
+			return minhaLista[tamanhoLista-1];
+		}
+
+		bool vazia(){
+			if(Lista::tamanhoLista == 0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+		bool cheia(){
+			if(Lista::tamanhoLista == Lista::tamanhoMaximo){
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+		int tamanhoPilha() {
+			return tamanhoLista;
+		}
+
+		void imprime(){
+			for(int i = 0 ; i<tamanhoLista; i++){
+				cout<<Lista::minhaLista[i].valorCarta()<<"\t";
+				if(Lista::minhaLista[i].valorNaipe() == 0){
+					cout<<"Espadas"<<endl;
+				}else if(Lista::minhaLista[i].valorNaipe() == 1){
+					cout<<"Ouros"<<endl;
+				}else if(Lista::minhaLista[i].valorNaipe() == 2){
+					cout<<"Paus"<<endl;
+				}else{
+					cout<<"Copas"<<endl;
+				}
+			}
+		}
+};
+
+
+xx utils.h xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+class Baralho {
+	public:
+		Baralho() {}
+		void baguncar(cartaBaralho a[], int tamanho);
+		void init(Pilha *jogadorA, Pilha *jogadorB);
+};
+
+void Baralho::baguncar(cartaBaralho a[], int tamanho) {
+	srand((unsigned)time(0));
+	for(int i=tamanho-1; i>=1; --i){
+    	swap(a[i], a[rand()%i]);
+	}
+}
+
+void Baralho::init(Pilha *jogadorA, Pilha *jogadorB) { /* Inicializa, embaralha e distribui */
+	cartaBaralho carta[52];
+	int index = 0;
+	for (int i = 1; i < 14; i++) {
+		carta[index++] = cartaBaralho(cartaBaralho::Espadas, i);
+		carta[index++] = cartaBaralho(cartaBaralho::Ouros, i);
+		carta[index++] = cartaBaralho(cartaBaralho::Paus, i);
+		carta[index++] = cartaBaralho(cartaBaralho::Copas, i);
+	}
+	baguncar(carta, 52);
+	for (int i = 0; i < 52; i++) // Distribui as cartas
+		(i % 2 == 0) ? jogadorA->inserir(carta[i]) : jogadorB->inserir(carta[i]);;
+}
+
+void mostraRodada(cartaBaralho a, cartaBaralho b) {
+	string naipe[] = {"Espadas", "Ouros", "Paus", "Copas"};
+	string c[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+	cout <<" [eu] "<< c[a.valorCarta() - 1] <<"  "<< naipe[a.valorNaipe()] << endl;
+	cout <<" [pc] "<< c[b.valorCarta() - 1] <<"  "<< naipe[b.valorNaipe()] << endl;
+}
+
+void comparaCartas(cartaBaralho a, cartaBaralho b, Pilha *areaCombate, Pilha *prisioneiroA, Pilha *prisioneiroB) {
+	if (a.valorCarta() != b.valorCarta()) {
+		cartaBaralho carta;
+		if (a.valorCarta() > b.valorCarta()){
+			while (!areaCombate->vazia()){
+				prisioneiroA->inserir(areaCombate->topo());
+				areaCombate->remover();
+			}
+		} else {
+			while (!areaCombate->vazia()){
+				prisioneiroB->inserir(areaCombate->topo());
+				areaCombate->remover();
+			}
+		}
+		cout << "--------------------------------------" << endl;
+	}
+}
+
+void pegaDoPrisioneiro(Pilha *jogadorA, Pilha *jogadorB, Pilha *prisioneiroA, Pilha *prisioneiroB) {
+	cartaBaralho carta;
+	if (jogadorA->tamanhoPilha() == 0){
+		while(!prisioneiroA->vazia()){
+			carta = prisioneiroA->topo();
+			carta.vira();
+			jogadorA->inserir(carta);
+			prisioneiroA->remover();
+		}
+	}
+	if (jogadorB->tamanhoPilha() == 0){
+		while(!prisioneiroB->vazia()){
+			carta = prisioneiroB->topo();
+			carta.vira();
+			jogadorB->inserir(carta);
+			prisioneiroB->remover();
+		}
+	}
+}
+
+
+xx guerra.cpp xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+#include <iostream>
+#include <ctime>
+#include "cartaBaralho.h"
+#include "pilha.h"
+#include "utils.h" /* baguncar(), init(), mostraRodada(), comparaCartas(), pegaDoPrisioneiro()*/
+
+using namespace std;
+
+void menu() {
+	cout <<"**************************************"<<endl;
+	cout <<"********        GUERRA        ********"<<endl;
+	cout <<"**************************************"<<endl;
+
+	cout << "\nComo o jogo funciona:\n\n";
+	cout << "1. Cada jogador começa com 26 cartas viradas para baixo\n";
+	cout << "2. Os jogadores viram a carta do topo para cima no combate\n";
+	cout << "3. A maior carta ganha\n";
+	cout << "4. O vencedor leva as cartas para a pilha 'prisioneiro'\n";
+	cout << "*  Se empatar, continuam virando as cartas até desempatar\n";
+	cout << "5. Isso se repete até a rodada 60 ou alguém capturar 35 cartas\n";
+	cout << "6. Quem capturar mais cartas é o vencedor!\n";
+}
+
+int main() {
+	Baralho baralho;
+	Pilha jogadorA, jogadorB, areaCombate, prisioneiroA, prisioneiroB;
+	int qtdCartasA, qtdCartasB;
+	baralho.init(&jogadorA, &jogadorB);
+	char begin;
+	bool game;
+
+	menu();
+	cout << "\n\nPronto para começar (s)? ";
+	cin >> begin;
+	cout << "\n\n\n\n";
+	if (begin == 's') game = true;
+
+	int rodadas = 0;
+
+	while (game) {
+		cartaBaralho cartaA, cartaB;
+
+		cartaA = jogadorA.topo();
+		cartaB = jogadorB.topo();
+
+		//vira as cartas
+		cartaA.vira();
+		cartaB.vira();
+
+		//inserir as cartas na area de combate
+		areaCombate.inserir(cartaA);
+		areaCombate.inserir(cartaB);
+
+		//remove a primeira carta de cada jogador, pois as cartas estao na area de combate
+		jogadorA.remover();
+		jogadorB.remover();
+		int valorCartaA = cartaA.valorCarta();
+		int valorCartaB = cartaB.valorCarta();
+		mostraRodada(cartaA, cartaB);
+		comparaCartas(cartaA, cartaB, &areaCombate, &prisioneiroA, &prisioneiroB);
+		if (jogadorA.tamanhoPilha() == 0 || jogadorB.tamanhoPilha() == 0){
+			pegaDoPrisioneiro(&jogadorA, &jogadorB, &prisioneiroA, &prisioneiroB);
+		}
+
+		// Condicoes de parada
+		if (rodadas >= 60) {
+			game = false;
+			cout << "\nChegamos em 60 rodadas" << endl;
+		};
+		qtdCartasA = prisioneiroA.tamanhoPilha() + jogadorA.tamanhoPilha();
+		qtdCartasB = prisioneiroB.tamanhoPilha() + jogadorB.tamanhoPilha();
+
+		if ( qtdCartasA >= 35 || qtdCartasB >= 35)
+			game = false;
+
+		rodadas++;
+	}
+
+	cout << "\nCartas - Jogador A: " << qtdCartasA<<endl;
+	cout << "Cartas - Jogador B: " << qtdCartasB<<endl;
+
+	return 0;
+}

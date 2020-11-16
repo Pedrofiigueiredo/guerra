@@ -6,17 +6,35 @@
 
 using namespace std;
 
+void menu() {
+	cout <<"**************************************"<<endl;
+	cout <<"********        GUERRA        ********"<<endl;
+	cout <<"**************************************"<<endl;
+
+	cout << "\nComo o jogo funciona:\n\n";
+	cout << "1. Cada jogador começa com 26 cartas viradas para baixo\n";
+	cout << "2. Os jogadores viram a carta do topo para cima no combate\n";
+	cout << "3. A maior carta ganha\n";
+	cout << "4. O vencedor leva as cartas para a pilha 'prisioneiro'\n";
+	cout << "*  Se empatar, continuam virando as cartas até desempatar\n";
+	cout << "5. Isso se repete até a rodada 60 ou alguém capturar 35 cartas\n";
+	cout << "6. Quem capturar mais cartas é o vencedor!\n";
+}
+
 int main() {
 	Baralho baralho;
 	Pilha jogadorA, jogadorB, areaCombate, prisioneiroA, prisioneiroB;
 	int qtdCartasA, qtdCartasB;
 	baralho.init(&jogadorA, &jogadorB);
+	char begin;
+	bool game;
 
-	cout <<"**************************************"<<endl;
-	cout <<"********        GUERRA        ********"<<endl;
-	cout <<"**************************************"<<endl;
+	menu();
+	cout << "\n\nPronto para começar (s)? ";
+	cin >> begin;
+	cout << "\n\n\n\n";
+	if (begin == 's') game = true;
 
-	bool game = true;
 	int rodadas = 0;
 
 	while (game) {

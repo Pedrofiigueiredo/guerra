@@ -29,8 +29,8 @@ void Baralho::init(Pilha *jogadorA, Pilha *jogadorB) { /* Inicializa, embaralha 
 void mostraRodada(cartaBaralho a, cartaBaralho b) {
 	string naipe[] = {"Espadas", "Ouros", "Paus", "Copas"};
 	string c[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-	cout <<" "<< c[a.valorCarta() - 1] <<"\t"<< naipe[a.valorNaipe()] << endl;
-	cout <<" "<< c[b.valorCarta() - 1] <<"\t"<< naipe[b.valorNaipe()] << endl;
+	cout <<" [eu] "<< c[a.valorCarta() - 1] <<"  "<< naipe[a.valorNaipe()] << endl;
+	cout <<" [pc] "<< c[b.valorCarta() - 1] <<"  "<< naipe[b.valorNaipe()] << endl;
 }
 
 void comparaCartas(cartaBaralho a, cartaBaralho b, Pilha *areaCombate, Pilha *prisioneiroA, Pilha *prisioneiroB) {

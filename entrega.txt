@@ -1,7 +1,5 @@
 Pedro Figueiredo Dias - 41990455
 Ye Wei Jiang - 41926293
-Kevin Yao Ji - 41916492
-Claudio Ramos Siqueira Junior - 41916565
 
 xx cartaBaralho.h xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
